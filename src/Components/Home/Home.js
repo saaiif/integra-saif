@@ -148,8 +148,14 @@ export default function Home() {
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
   let mainStateSubArr = state.studentData !== 0 ? state.studentData : [];
 
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchName, setSearchName] = React.useState([]);
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
   const [chipData, setChipData] = React.useState(mainStateSubArr);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -171,6 +177,35 @@ export default function Home() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const handleDelete = (chipToDelete) => () => {
+    setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
+  };
+
+  const addStudent = () => {
+    if (state === null) {
+      dispatch({ type: "ADD_STUDENT", payload: [] });
+    }
+    history.push("/addstudent");
+  };
+
+  React.useEffect(() => {
+    const results = chipData.filter(
+      (person) =>
+        person.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()) ||
+        person.name.toUpperCase().includes(searchTerm.toLocaleUpperCase())
+    );
+
+    setSearchName(results);
+
+    if (chipData) {
+      dispatch({
+        type: "ADD_STUDENT",
+        payload: chipData,
+      });
+    }
+    // state.totalsubarray = chipData;
+  }, [chipData, searchTerm]);
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -200,33 +235,12 @@ export default function Home() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <Button variant='contained' color='secondary'>
+        <Button variant='contained' color='secondary' onClick={addStudent}>
           Add Student
         </Button>
       </MenuItem>
     </Menu>
   );
-
-  const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
-  };
-
-  const addStudent = () => {
-    if (state === null) {
-      dispatch({ type: "ADD_STUDENT", payload: [] });
-    }
-    history.push("/addstudent");
-  };
-
-  React.useEffect(() => {
-    if (chipData) {
-      dispatch({
-        type: "ADD_STUDENT",
-        payload: chipData,
-      });
-    }
-    // state.totalsubarray = chipData;
-  }, [chipData]);
 
   return (
     <div className={classes.grow}>
@@ -246,6 +260,8 @@ export default function Home() {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              value={searchTerm}
+              onChange={handleChange}
             />
           </div>
           <div className={classes.grow} />
@@ -273,7 +289,7 @@ export default function Home() {
       <Box>
         <Grid container xs={12} spacing={2}>
           {state !== null && state.studentData.length > 0
-            ? state.studentData.map((el, index) => {
+            ? searchName.map((el, index) => {
                 return (
                   <Grid item lg={3} xs={12} sm={6} md={6}>
                     <h2 className={classes.avatar}>{index + 1}</h2>
