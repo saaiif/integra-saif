@@ -15,6 +15,20 @@ export const reducer = (state, action) => {
         kk: action.payload,
       };
 
+    case "EDIT_STUDENT":
+      const updateStudent = action.payload;
+      const updateStudents = state.studentData.map((student) => {
+        if (student.id === updateStudent.id) {
+          return updateStudent;
+        }
+        return student;
+      });
+
+      return {
+        ...state,
+        studentData: updateStudents,
+      };
+
     default:
       return state;
   }

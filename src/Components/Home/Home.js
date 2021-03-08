@@ -18,129 +18,11 @@ import { Box, Button, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { UserContext } from "./../../App";
 import { useHistory } from "react-router";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
-const useStyles = makeStyles((theme) => ({
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-    // width:"20px",
-    // borderRadius:"50%",
-    // height:"10px"
-    margin: "10px auto",
-    display: "block",
-    width: "40px",
-    height: "40px",
-    borderRadius: "50%",
-    lineHeight: "35px",
-  },
-  grow: {
-    "& .MuiGrid-spacing-xs-2": {
-      margin: "0px",
-    },
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-  sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex",
-    },
-  },
-  sectionMobile: {
-    display: "flex",
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  },
-}));
+import FormControl from "@material-ui/core/FormControl";
 
-const details = [
-  {
-    name: "Saif",
-    age: 18,
-    address: "Bangalore",
-    gender: "male",
-    mobile: "8547558475",
-    class: 4,
-    rollno: 28,
-    bloodgroup: "A+",
-  },
-  {
-    name: "Virat",
-    age: 18,
-    address: "Bangalore",
-    gender: "male",
-    mobile: "8547558475",
-    class: 4,
-    rollno: 28,
-    bloodgroup: "A+",
-  },
-  {
-    name: "Rahul",
-    age: 18,
-    address: "Bangalore",
-    gender: "male",
-    mobile: "8547558475",
-    class: 4,
-    rollno: 28,
-    bloodgroup: "A+",
-  },
-  {
-    name: "Mohan",
-    age: 18,
-    address: "Bangalore",
-    gender: "male",
-    mobile: "8547558475",
-    class: 4,
-    rollno: 28,
-    bloodgroup: "A+",
-  },
-];
+import useStyles from "./Style";
 
 export default function Home() {
   const classes = useStyles();
@@ -149,7 +31,8 @@ export default function Home() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  let mainStateSubArr = state.studentData !== 0 ? state.studentData : [];
+  let mainStateSubArr =
+    state !== null && state.studentData !== 0 ? state.studentData : [];
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const [searchName, setSearchName] = React.useState([]);
@@ -243,84 +126,138 @@ export default function Home() {
   );
 
   return (
-    <div className={classes.grow}>
-      <AppBar position='static'>
-        <Toolbar>
-          <Typography className={classes.title} variant='h6' noWrap>
-            Student Management System
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+    <Box className={classes.root}>
+      <div className={classes.grow}>
+        <AppBar position='static' style={{ background: "#142134" }}>
+          <Toolbar>
+            <Typography className={classes.title} variant='h6' noWrap>
+              Student Management System
+            </Typography>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder='Search…'
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+                value={searchTerm}
+                onChange={handleChange}
+              />
             </div>
-            <InputBase
-              placeholder='Search…'
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-              value={searchTerm}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <Button variant='contained' color='secondary' onClick={addStudent}>
-              Add Student
-            </Button>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label='show more'
-              aria-controls={mobileMenuId}
-              aria-haspopup='true'
-              onClick={handleMobileMenuOpen}
-              color='inherit'
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <Button
+                variant='contained'
+                color='secondary'
+                onClick={addStudent}
+              >
+                Add Student
+              </Button>
+            </div>
+            <div className={classes.sectionMobile}>
+              <IconButton
+                aria-label='show more'
+                aria-controls={mobileMenuId}
+                aria-haspopup='true'
+                onClick={handleMobileMenuOpen}
+                color='inherit'
+              >
+                <MoreIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
 
-      <Box>
-        <Grid container xs={12} spacing={2}>
-          {state !== null && state.studentData.length > 0
-            ? searchName.map((el, index) => {
-                return (
-                  <Grid item lg={3} xs={12} sm={6} md={6}>
-                    <h2 className={classes.avatar}>{index + 1}</h2>
-                    <Box
-                      style={{
-                        background: "#b3868e",
-                        textAlign: "start",
-                        padding: "5px 10px",
-                      }}
-                    >
-                      <h2>name: {el.name}</h2>
-                      <h2>age: {el.age}</h2>
-                      <h2>address: {el.address}</h2>
-                      <h2>gender: {el.gender}</h2>
-                      <h2>mobile: {el.mobile}</h2>
-                      <h2>class: {el.className}</h2>
-                      <h2>rollno: {el.rollNo}</h2>
-                      <h2>bloodgroup: {el.bloodgroup}</h2>
-                      <Box>
-                        <Link to='/edit'>
-                          <Button>Edit</Button>
-                        </Link>
-                        <Button onClick={handleDelete(el)}>Delete</Button>
+        {searchName.length === 0 ? (
+          <Typography className={classes.message}>
+            No student's found
+          </Typography>
+        ) : (
+          <Box padding='5px 20px'>
+            <Grid container xs={12} spacing={2}>
+              {state !== null && state.studentData.length > 0 ? (
+                searchName.map((el, index) => {
+                  return (
+                    <Grid item lg={4} xs={12} sm={6} md={6}>
+                      <h3 className={classes.avatar}>{index + 1}</h3>
+                      <Box
+                        style={{
+                          background: "#282c34",
+                          color: "#fff",
+                          textAlign: "start",
+                          padding: "5px 10px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        <h4>
+                          <span className={classes.params}>Name:</span>{" "}
+                          {el.name}
+                        </h4>
+                        <h4>
+                          <span className={classes.params}>Age:</span> {el.age}
+                        </h4>
+                        <h4>
+                          <span className={classes.params}>Address:</span>{" "}
+                          {el.address}
+                        </h4>
+                        <h4>
+                          <span className={classes.params}>Gender:</span>{" "}
+                          {el.gender}
+                        </h4>
+                        <h4>
+                          <span className={classes.params}>Mobile Number:</span>{" "}
+                          {el.mobile}
+                        </h4>
+                        <h4>
+                          <span className={classes.params}>Class:</span>{" "}
+                          {el.className}
+                        </h4>
+                        <h4>
+                          <span className={classes.params}>Rollno:</span>{" "}
+                          {el.rollNo}
+                        </h4>
+                        <h4>
+                          <span className={classes.params}>Bloodgroup:</span>{" "}
+                          {el.bloodgroup}
+                        </h4>
+                        <Box display='flex' justifyContent='space-around'>
+                          <Button
+                            variant='outlined'
+                            className={classes.edit}
+                            onClick={() => history.push(`/edit/${el.id}`)}
+                          >
+                            Edit
+                          </Button>
+
+                          <Button
+                            className={classes.delete}
+                            onClick={handleDelete(el)}
+                          >
+                            <span> Delete </span>
+                            <span>
+                              <DeleteForeverIcon />
+                            </span>
+                          </Button>
+                        </Box>
                       </Box>
-                    </Box>
-                  </Grid>
-                );
-              })
-            : "No data for student, Please add new student"}
-        </Grid>
-      </Box>
-    </div>
+                    </Grid>
+                  );
+                })
+              ) : (
+                <Typography className={classes.message}>
+                  No data for student, Please add new student
+                </Typography>
+              )}
+            </Grid>
+          </Box>
+        )}
+      </div>
+    </Box>
   );
 }

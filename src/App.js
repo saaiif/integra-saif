@@ -21,8 +21,8 @@ function App({ children }) {
       <div className='App'>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route exact path='/addstudent' component={AddStudent} />
-          <Route exact path='/edit' component={EditStudent} />
+          <Route path='/addstudent' component={AddStudent} />
+          <Route path='/edit/:id' component={EditStudent} />
         </Switch>
         {children}
       </div>
