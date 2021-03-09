@@ -1,26 +1,18 @@
 import React from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Box, Button, Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import { UserContext } from "./../../App";
 import { useHistory } from "react-router";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-
-import FormControl from "@material-ui/core/FormControl";
 
 import useStyles from "./Style";
 
@@ -43,10 +35,6 @@ export default function Home() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -87,7 +75,6 @@ export default function Home() {
         payload: chipData,
       });
     }
-    // state.totalsubarray = chipData;
   }, [chipData, searchTerm]);
 
   const menuId = "primary-search-account-menu";

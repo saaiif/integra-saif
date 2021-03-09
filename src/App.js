@@ -2,7 +2,7 @@ import React, { useEffect, createContext, useReducer } from "react";
 
 import "./App.css";
 import Home from "./Components/Home/Home";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import AddStudent from "./Components/AddStudent/AddStudent";
 import EditStudent from "./Components/EditStudent/EditStudent";
 import { reducer, initialState } from "./reducer/useReducer";

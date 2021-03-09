@@ -21,7 +21,6 @@ export default makeStyles((theme) => ({
     marginBottom: "10px",
   },
   avatar: {
-    margin: theme.spacing(1),
     backgroundColor: "#142134",
     margin: "10px auto",
     display: "block",

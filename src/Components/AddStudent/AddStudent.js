@@ -139,13 +139,9 @@ export default function AddStudent() {
       return snackOpen && snackerror;
     }
 
-    if (!address || mobile.length < 5) {
+    if (!address) {
       let snackOpen = setSnackBarOpen(true);
-      let snackerror = setError(
-        address.length !== 0
-          ? "Address must be minimum of 5 characters"
-          : "Address Number is required"
-      );
+      let snackerror = setError("Address Number is required");
       return snackOpen && snackerror;
     }
     if (className == "classtype") {

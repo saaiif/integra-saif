@@ -3,10 +3,9 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { TextField, MenuItem, Select } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import AddIcon from "@material-ui/icons/Add";
+import CreateIcon from "@material-ui/icons/Create";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Radio from "@material-ui/core/Radio";
@@ -16,6 +15,13 @@ import FormControl from "@material-ui/core/FormControl";
 import useStyles from "./Style";
 import { UserContext } from "./../../App";
 import { useHistory, useParams } from "react-router";
+
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 const preferedClass = [
   { keyId: 0, class: 1 },
@@ -37,6 +43,8 @@ export default function EditStudent() {
   const classes = useStyles();
   const history = useHistory();
   let { id } = useParams();
+  const [snackbarOpen, setSnackBarOpen] = useState(false);
+  const [error, setError] = useState("");
 
   const [selectedStudent, setSeletedStudent] = useState({
     id: null,
@@ -52,10 +60,64 @@ export default function EditStudent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch({ type: "ADD_STUDENT_KK", payload: "saif" });
-    dispatch({ type: "EDIT_STUDENT", payload: selectedStudent });
+    if (!selectedStudent.name || selectedStudent.name.length < 6) {
+      let snackOpen = setSnackBarOpen(true);
+      let snackerror = setError(
+        selectedStudent.name.length !== 0
+          ? "Name must be minimum of 6 characters"
+          : "Name is required"
+      );
+      return snackOpen && snackerror;
+    }
+    if (!selectedStudent.mobile || selectedStudent.mobile.length < 10) {
+      let snackOpen = setSnackBarOpen(true);
+      let snackerror = setError(
+        selectedStudent.mobile.length !== 0
+          ? "Mobile Number must be minimum of 10 characters"
+          : "Mobile Number is required"
+      );
+      return snackOpen && snackerror;
+    }
 
-    history.push("/");
+    if (!selectedStudent.address || selectedStudent.address.length < 5) {
+      let snackOpen = setSnackBarOpen(true);
+      let snackerror = setError(
+        selectedStudent.address.length !== 0
+          ? "Address must be minimum of 5 characters"
+          : "Address Number is required"
+      );
+      return snackOpen && snackerror;
+    }
+    if (selectedStudent.className == "classtype") {
+      let snackOpen = setSnackBarOpen(true);
+      let snackerror = setError("Class is required");
+      return snackOpen && snackerror;
+    }
+    if (!selectedStudent.rollNo) {
+      let snackOpen = setSnackBarOpen(true);
+      let snackerror = setError("Roll Number is required");
+      return snackOpen && snackerror;
+    }
+    if (!selectedStudent.bloodgroup) {
+      let snackOpen = setSnackBarOpen(true);
+      let snackerror = setError("Bloodgroup is required");
+      return snackOpen && snackerror;
+    }
+
+    if (!selectedStudent.age) {
+      let snackOpen = setSnackBarOpen(true);
+      let snackerror = setError("Age is required");
+      return snackOpen && snackerror;
+    }
+
+    if (!selectedStudent.name) {
+      registerFieldsError();
+    } else {
+      dispatch({ type: "ADD_STUDENT_KK", payload: "saif" });
+      dispatch({ type: "EDIT_STUDENT", payload: selectedStudent });
+
+      history.push("/");
+    }
   };
 
   const handleOnChange = (userKey, value) =>
@@ -73,12 +135,22 @@ export default function EditStudent() {
     setSeletedStudent(selectedUser);
   }, []);
 
+  const registerFieldsError = () => {
+    if (!selectedStudent.name) {
+      document.querySelector("#names").innerHTML = "Parent Name  is required";
+    }
+  };
+
+  const snackbarClose = () => {
+    setSnackBarOpen(false);
+  };
+
   return (
     <Container>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <AddIcon />
+          <CreateIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
           Update Student
@@ -99,6 +171,16 @@ export default function EditStudent() {
                 value={selectedStudent.name}
                 onChange={(e) => handleOnChange("name", e.target.value)}
               />
+              {!selectedStudent.name ? (
+                <Typography
+                  variant='body2'
+                  style={{ color: "#bababa" }}
+                  id='names'
+                  className={classes.error}
+                ></Typography>
+              ) : (
+                ""
+              )}
               <TextField
                 variant='outlined'
                 margin='normal'
@@ -110,6 +192,10 @@ export default function EditStudent() {
                 id='age'
                 autoComplete='current-age'
                 value={selectedStudent.age}
+                inputProps={{ maxLength: 3 }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
                 onChange={(e) => handleOnChange("age", e.target.value)}
               />
               <TextField
@@ -189,6 +275,10 @@ export default function EditStudent() {
                 type='mobile'
                 id='mobile'
                 autoComplete='mobile'
+                inputProps={{ maxLength: 10 }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
                 value={selectedStudent.mobile}
                 onChange={(e) => handleOnChange("mobile", e.target.value)}
               />
@@ -219,6 +309,9 @@ export default function EditStudent() {
                 type='rollno'
                 id='rollno'
                 autoComplete='rollno'
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
                 value={selectedStudent.rollNo}
                 onChange={(e) => handleOnChange("rollNo", e.target.value)}
               />
@@ -255,6 +348,19 @@ export default function EditStudent() {
           Back to home
         </Button>
       </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={snackbarOpen}
+        autoHideDuration={1500}
+        onClose={snackbarClose}
+      >
+        <Alert onClose={snackbarClose} severity='error'>
+          {error}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
