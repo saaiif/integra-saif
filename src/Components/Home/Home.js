@@ -195,7 +195,7 @@ export default function Home() {
                         </h4>
                         <h4>
                           <span className={classes.params}>Gender:</span>{" "}
-                          {el.gender}
+                          {el.selected}
                         </h4>
                         <h4>
                           <span className={classes.params}>Mobile Number:</span>{" "}
